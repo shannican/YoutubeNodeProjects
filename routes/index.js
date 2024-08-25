@@ -14,24 +14,28 @@ const mediaModel = require('./media')
 const medias = require('./media');
 var localStrategy = require('passport-local');
 const nodemailer = require('../nodemailer')
+const profile = require('../confii/mul')
 
 passport.use(new localStrategy(userModel.authenticate()))
 passport.use(userModel.createStrategy());
 
 const videoUpload = multer({ storage: confii.videoUpload })
 
-const storage = multer.diskStorage({
-  destination: function (req, file, cb) {
-    cb(null, './public/images/uploads')
-  },
-  filename: function (req, file, cb) {
-    var filename = Date.now() + Math.random() * 1000000 + file.originalname;
-    cb(null, filename)
+const profileUploads = multer({ storage: confii.profileUploads })
+
+router.post('/create/media', isLoggedIn, videoUpload.single('video'),async function (req, res, next) {
+  let user = await req.user
+  let data = {
+    title: req.body.title,
+    description: req.body.description,
+    video: req.file.filename,
   }
+  let media = await mediaModel.create(data)
+  user.medias.push(media._id)
+  await user.save();
+  console.log(user)
+  res.redirect('/home')
 })
-
-const upload = multer({ storage: storage })
-
 /* GET home page. */
 router.get('/', function (req, res, next) {
   res.render('login');
@@ -173,7 +177,7 @@ router.post('/login', passport.authenticate('local', {
   failureRedirect: '/register'
 }));
 
-router.post('/register', upload.single("profilePic"), function (req, res) {
+router.post('/register', profileUploads.single("profilePic"), function (req, res) {
   var newUser = new userModel({
     fname: req.body.fname,
     lname: req.body.lname,
@@ -191,24 +195,42 @@ router.post('/register', upload.single("profilePic"), function (req, res) {
     })
 })
 
+router.post('/checkEmail',async function(req,res){
+  const email= await userModel.findOne({ email:req.body.input})
+  console.log(email)
+  if(email){
+    res.send("exists email")
+  }else{
+    res.send("not exists email")
+  }
+})
+
+// search user
+router.get('/find/:email', function(req,res){
+  var regexp = new RegExp("^"+req.params.email)
+  userModel.find({email:regexp})
+  .then(function(allusers){
+    console.log(allusers)
+    res.json(allusers)
+  })
+})
+
+
+router.get('/search/:description',function(req,res){
+  var rexp = new RegExp("^"+req.params.description)
+  mediaModel.find({description:rexp})
+  .then(function(allmedia){
+    console.log(allmedia)
+    res.json(allmedia)
+  })
+})
+
 router.get('/delete/media/:id', isLoggedIn, async function (req, res) {
   const mediaIndex = req.user.medias.findIndex(media => media._id === req.params.id);
   req.user.medias.splice(mediaIndex, 1);
   await mediaModel.findOneAndDelete({ _id: req.params.id }).exec();
   await req.user.save();
   res.redirect('/yourVideos')
-})
-router.post('/create/media', isLoggedIn, videoUpload.single('video') ,async function (req, res, next) {
-  let user = await req.user
-  let data = {
-    title: req.body.title,
-    description: req.body.description,
-    video: req.file.filename,
-  }
-  let media = await mediaModel.create(data)
-  user.medias.push(media._id)
-  await user.save();
-  res.redirect('/home')
 })
 
 router.post('/editmedia/media/:idd', isLoggedIn, async function (req, res) {

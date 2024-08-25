@@ -38,7 +38,10 @@
                 </div>
                 <div class="input">
                     <label for="">Email*</label>
-                    <input name="email" type="email">
+                    <input id="emailInput" name="email" type="email">
+                    <div id="resultEmail">
+                        
+                    </div>
                 </div>
                 <div class="input">
                     <label for="">New Password*</label>
@@ -52,7 +55,7 @@
                     <input id="check" type="checkbox" name="check" value="form">
                     <label style="margin-bottom: 20px; margin-left:20px;" for="checkbox">Yes, I agree to all The <a href="">Terms</a> and <a href="">Privacy Policy</a></label>
                 </div>
-                <input id="submit-btn" type="submit" value="Create Account">
+                <button type="submit" id="submit-btn">Create account</button>
                 <div id="signup">Already have an account? <a href="/login">Sign in</a></div>
                 <a href="/login/federated/google" id="googleAuth">
                     <div id="img">
@@ -63,5 +66,58 @@
             </form>
         </div>
     </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.4.0/axios.min.js" integrity="sha512-uMtXmF28A2Ab/JJO2t/vYhlaa/3ahUOgj1Zf27M5rOo8/+fcTUVH0/E0ll68njmjrLqOBjXM3V9NiPFL5ywWPQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+    <script>
+        var inp= document.querySelector("#emailInput")
+        inp.addEventListener("blur",function(){
+            document.querySelector("#resultEmail").innerHTML=""
+        })
+        inp.addEventListener("input",function(){
+            if(inp.value){
+                axios.get(`/find/${inp.value}`)
+                .then(function(emailData){
+                    if(!emailData.data){
+                        document.querySelector("#resultEmail").innerHTML=""
+                        document.querySelector("#resultEmail").style.background="none"   
+                    }else{
+                        var clutter = ""
+                        console.log(emailData.data)
+                        emailData.data.forEach(function(member){
+                            clutter+=`<h4>${member.email}</h4>`
+                            document.querySelector("#resultEmail").innerHTML=clutter
+                            document.querySelector("#resultEmail").style.background="rgb(244, 66, 66)"
+                        })
+                    }
+                })
+            }else{
+                document.querySelector("#resultEmail").innerHTML=""
+                document.querySelector("#resultEmail").style.background="none"
+            }
+        })
+
+        document.querySelector("#emailInput").addEventListener("input",async function(dets){
+            if(dets.target.value.trim().length > 0){
+                const axiosData = await axios.post("/checkEmail",{input: dets.target.value.trim()}) 
+                if(axiosData.data=="exists email"){
+                    document.querySelector("button").disabled = true
+                    dets.target.style.boxShadow = "0 0 0 2px red"
+                    dets.target.style.border = "none"
+                    dets.target.style.outline = "none"
+                }else{
+                    document.querySelector("button").disabled = false
+                    dets.target.style.boxShadow = "none"
+                    dets.target.style.outline = "1px solid black"
+                    dets.target.style.border = "none"
+                }
+            }else{
+                document.querySelector("button").disabled = true
+                dets.target.style.boxShadow = "0 0 0 2px red"
+                dets.target.style.border = "none"
+                dets.target.style.outline = "none"
+            }
+        })
+    </script>
 </body>
 </html>

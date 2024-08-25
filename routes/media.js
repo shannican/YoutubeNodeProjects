@@ -4,6 +4,7 @@ var mediaSchema = mongoose.Schema({
     title:String,
     description:String,
     video:String,
+    thumbnail:String,
     comment:{
       type:Array,
       default:[],

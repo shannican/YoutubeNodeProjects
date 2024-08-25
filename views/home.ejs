@@ -10,9 +10,10 @@
     <link rel="stylesheet" href="../stylesheets/home.css">
 </head>
 <body>
+
     <!-- modal1 -->
 
-    <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog">
           <div class="modal-content">
             <div class="modal-header" style="border-bottom: 0.3px solid rgba(255, 255, 255, 0.259);">
@@ -48,31 +49,30 @@
         </div>
         <div class="modal-body modal2">
             <h3>Details</h3>
-          <!-- <form id="desc-form" action="/create/media" method="post"> -->
-                <div id="tittle">
-                    <label for="">Title (required)*</label>
-                    <input id="title-input" name="title" type="text" placeholder="Add a title that describes your (type @ to mention a channel)">
-                    <label id="label2" for="title-input">100</label>
-                </div>
-                <div id="description">
-                    <label for="">Description</label>
-                    <textarea name="description" id="desc-input" cols="50" rows="50" placeholder="Tell viewers about your video(type @ to mention  a channel)"></textarea>
-                    <label id="label2" class="desc-count" for="description">200</label>
-                </div>
-
+            <div id="tittle">
+                <label for="">Title (required)*</label>
+                <input id="title-input" name="title" type="text" placeholder="Add a title that describes your (type @ to mention a channel)">
+                <label id="label2" for="title-input">100</label>
+            </div>
+            <div id="description">
+                <label for="">Description</label>
+                <textarea name="description" id="desc-input" cols="50" rows="50" placeholder="Tell viewers about your video(type @ to mention  a channel)"></textarea>
+                <label id="label2" class="desc-count" for="description">200</label>
+            </div>
                 <input id="reset-btn" type="reset" value="Reset">
                 <input id="submit-btnnn" type="submit" value="Upload">
-          </form>
-        </div>
+            </div>
+        </form>
         <div class="modal-footer" style="position: relative;bottom:45px;border-top: 0.3px solid rgba(255, 255, 255, 0.259);">
 
         </div>
       </div>
     </div>
   </div>
- 
+
  
   <div id="main">
+    
         <div id="navbar">
             <div id="left-nav">
                 <div id="menu-icon">
@@ -84,11 +84,16 @@
             </div>
             <div id="center-nav">
                     <div class="form-outline">
-                      <input id="search-focus" type="search" placeholder="Search"/>
+                        <form action="" id="searchField">
+                            <input id="search-focus" type="search" results="10" placeholder="Search"/>
+                            <button type="button" id="btn"  onclick="CheckAndSubmit()">
+                                <i class="ri-search-line"></i>
+                            </button>
+                        </form>
                     </div>
-                    <button type="button" id="btn">
-                        <i class="ri-search-line"></i>
-                    </button>
+                    <div id="searchMedia">
+                        
+                    </div>
             </div>
             <div id="right-nav">
 
@@ -150,7 +155,7 @@
                         </div>
                     </div>
             </div>
-
+            
         </div>
         <div id="container">
             <div id="left-content">
@@ -241,6 +246,7 @@
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js" integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.4.0/axios.min.js" integrity="sha512-uMtXmF28A2Ab/JJO2t/vYhlaa/3ahUOgj1Zf27M5rOo8/+fcTUVH0/E0ll68njmjrLqOBjXM3V9NiPFL5ywWPQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     <script src="../javascripts/home.js"></script>
 </body>
 </html>

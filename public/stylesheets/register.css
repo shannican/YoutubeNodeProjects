@@ -53,7 +53,7 @@ html,body{
     margin-top: 10%;
     margin-left: 15%;
 }
-#right h4{
+#right>h4{
     position: relative;
     color: rgba(58, 1, 112, 0.947);
     font-size: 18px;
@@ -127,6 +127,26 @@ label{
     border: none;
     background-color: tomato;
     color: white;
+    cursor: pointer;
+}
+#resultEmail{
+    position: absolute;
+    min-width: 250px;
+    min-height: 30px;
+    /* background-color:rgb(244, 66, 66); */
+    top: 105%;
+    /* overflow: auto; */
+    z-index: 9999;
+}
+#resultEmail h4{
+    position: relative;
+    color: rgba(58, 1, 112, 0.947);
+    font-size: 18px;
+    font-weight: 500;
+    margin-left: 5px;
+    z-index: 999999;
+    cursor: pointer;
+    margin-top: 3px;
 }
 #googleAuth{
     position: absolute;
